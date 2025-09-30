@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: bank-postgres
+    environment:
+      POSTGRES_DB: bankdb
+      POSTGRES_USER: bankuser
+      POSTGRES_PASSWORD: bankpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bank-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bank-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bankdb
+      SPRING_DATASOURCE_USERNAME: bankuser
+      SPRING_DATASOURCE_PASSWORD: bankpass
+      JWT_SECRET: MyBankJWTSecretKeyForDockerApplicationDevelopmentMustBe256BitsOrMore12345
+      JWT_EXPIRATION: 86400000
+    depends_on:
+      - postgres
+    networks:
+      - bank-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  bank-network:
+    driver: bridge

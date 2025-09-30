@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="2" author="developer">
+        
+        <!-- Insert Admin user -->
+        <insert tableName="users">
+            <column name="id" valueSequenceNext="1"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$monster"
+                    comment="BCrypt hash for password: admin123"/>
+            <column name="first_name" value="Admin"/>
+            <column name="last_name" value="User"/>
+            <column name="email" value="admin@bank.com"/>
+            <column name="role" value="ADMIN"/>
+            <column name="created_at" valueDate="NOW()"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+
+        <!-- Insert initial test user -->
+        <insert tableName="users">
+            <column name="id" valueSequenceNext="2"/>
+            <column name="username" value="user"/>
+            <column name="password" value="$2a$10$monster2"
+                    comment="BCrypt hash for password: user123"/>
+            <column name="first_name" value="Test"/>
+            <column name="last_name" value="User"/>
+            <column name="email" value="user@bank.com"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueDate="NOW()"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>
